@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import re
 from abc import ABC
-from copy import deepcopy
 from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional, Tuple, Union
 
 from . import background_tasks, binding, globals
@@ -11,6 +10,7 @@ from .elements.mixins.visibility import Visibility
 from .event_listener import EventListener
 from .events import handle_event
 from .slot import Slot
+from .style import Style
 
 if TYPE_CHECKING:
     from .client import Client
@@ -33,6 +33,8 @@ class Element(ABC, Visibility):
         self._text: str = ''
         self.slots: Dict[str, Slot] = {}
         self.default_slot = self.add_slot('default')
+
+        self.style = Style(self)
 
         self.client.elements[self.id] = self
         self.parent_slot: Optional[Slot] = None
@@ -93,33 +95,6 @@ class Element(ABC, Visibility):
         new_classes = list(dict.fromkeys(class_list))  # NOTE: remove duplicates while preserving order
         if self._classes != new_classes:
             self._classes = new_classes
-            self.update()
-        return self
-
-    @staticmethod
-    def _parse_style(text: Optional[str]) -> Dict[str, str]:
-        result = {}
-        for word in (text or '').split(';'):
-            word = word.strip()
-            if word:
-                key, value = word.split(':', 1)
-                result[key.strip()] = value.strip()
-        return result
-
-    def style(self, add: Optional[str] = None, *, remove: Optional[str] = None, replace: Optional[str] = None):
-        '''CSS style sheet definitions to modify the look of the element.
-        Every style in the `remove` parameter will be removed from the element.
-        Styles are separated with a semicolon.
-        This can be helpful if the predefined style sheet definitions by NiceGUI are not wanted in a particular styling.
-        '''
-        style_dict = deepcopy(self._style) if replace is None else {}
-        for key in self._parse_style(remove):
-            if key in style_dict:
-                del style_dict[key]
-        style_dict.update(self._parse_style(add))
-        style_dict.update(self._parse_style(replace))
-        if self._style != style_dict:
-            self._style = style_dict
             self.update()
         return self
 
