@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import TYPE_CHECKING, Dict, Literal, Optional, overload
+from typing import TYPE_CHECKING, Dict, Optional, overload
+
+from typing_extensions import Literal
 
 if TYPE_CHECKING:
     from .element import Element

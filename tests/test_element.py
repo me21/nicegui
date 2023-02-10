@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 
 from nicegui import ui
 from nicegui.element import Element
+from nicegui.style import Style
 
 from .screen import Screen
 
@@ -34,11 +35,11 @@ def test_classes(screen: Screen):
 
 
 def test_style_parsing():
-    assert Element._parse_style(None) == {}
-    assert Element._parse_style('color: red; background-color: green') == {'color': 'red', 'background-color': 'green'}
-    assert Element._parse_style('width:12em;height:34.5em') == {'width': '12em', 'height': '34.5em'}
-    assert Element._parse_style('transform: translate(120.0px, 50%)') == {'transform': 'translate(120.0px, 50%)'}
-    assert Element._parse_style('box-shadow: 0 0 0.5em #1976d2') == {'box-shadow': '0 0 0.5em #1976d2'}
+    assert Style._parse(None) == {}
+    assert Style._parse('color: red; background-color: green') == {'color': 'red', 'background-color': 'green'}
+    assert Style._parse('width:12em;height:34.5em') == {'width': '12em', 'height': '34.5em'}
+    assert Style._parse('transform: translate(120.0px, 50%)') == {'transform': 'translate(120.0px, 50%)'}
+    assert Style._parse('box-shadow: 0 0 0.5em #1976d2') == {'box-shadow': '0 0 0.5em #1976d2'}
 
 
 def test_props_parsing():
