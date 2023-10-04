@@ -67,6 +67,7 @@ def run(self, *,
         reload_excludes=split_args(uvicorn_reload_excludes) if reload else None,
         reload_dirs=split_args(uvicorn_reload_dirs) if reload else None,
         log_level=uvicorn_logging_level,
+        ws_max_size=256 * 1024 * 1024,
     )
     globals.server = uvicorn.Server(config=config)
 
